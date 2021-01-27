@@ -22,7 +22,7 @@ namespace JWTExample
 
         readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-        public Startup(Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
+        public Startup(Microsoft.AspNetCore.Hosting.IWebHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
            .SetBasePath(env.ContentRootPath)
