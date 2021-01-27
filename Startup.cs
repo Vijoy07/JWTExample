@@ -1,13 +1,17 @@
+using JWTExample.Data;
+using JWTExample.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -36,8 +40,11 @@ namespace JWTExample
 
             var jwtTokenConfig = Configuration.GetSection("JwtConfig").Get<JwtConfig>();
 
+            services.AddDbContext<AuthDBContext>(option => { option.UseSqlServer(Configuration.GetConnectionString("myconn")); });
+            //services.AddTransient<HttpContext>();
             services.AddSingleton(jwtTokenConfig);
             services.AddSingleton<IJwtAuthcs, JwtAuth>();
+            services.AddSingleton<IRequestHeader, RequestHeader>();
             services.AddMvc();
             services.AddAuthentication(x =>
             {

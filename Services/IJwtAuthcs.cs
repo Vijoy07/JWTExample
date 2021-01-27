@@ -7,6 +7,6 @@ namespace JWTExample
 {
     public interface IJwtAuthcs
     {
-        public string GenerateJWTToken(string name);
+        public string GenerateJWTToken(UserCredentials name);
     }
 }

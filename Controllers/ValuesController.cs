@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using JWTExample.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,26 +13,18 @@ namespace JWTExample
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        private JwtConfig _conf;
-        private IJwtAuthcs _auth;
-    public ValuesController(JwtConfig conf,IJwtAuthcs auth)
+        private readonly  JwtConfig _conf;
+        private readonly IJwtAuthcs _auth;
+        private readonly AuthDBContext _context;
+        public ValuesController(JwtConfig conf,
+                            IJwtAuthcs auth,
+                            AuthDBContext context)
     {
         _conf = conf;
         _auth = auth;
+        _context = context;
     }
 
-    [HttpGet]
-    public JwtConfig Get()
-        {
-            return _conf;
-        }
-
-    [HttpGet("details")]
-    [Authorize]
-    public string[] Details()
-    {
-        return new string[] { "A", "B", "C" };
-    }
 
         [AllowAnonymous]
         [HttpPost("Login")]
@@ -42,11 +35,27 @@ namespace JWTExample
                return BadRequest();
             }
 
-            var token = _auth.GenerateJWTToken(user.Name);
+            try
+            {
 
-            return Ok(new { token });
+                var exists = _context.credentials.Where(x => x.Name == user.Name && x.Password == user.Password).FirstOrDefault();
 
+                if (exists != null)
+                {
+                    var token = _auth.GenerateJWTToken(exists);
 
-        }
+                    return Ok(new { token });
+
+                }
+                else
+                {
+                    return Ok(new { exists });
+                }
+
+            }
+            catch (Exception e) {
+                return BadRequest();
+            }
+    }
     }
 }
