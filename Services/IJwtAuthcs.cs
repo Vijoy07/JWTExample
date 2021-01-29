@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace JWTExample
 {
-    public class UserCredentials
+    public interface IJwtAuthcs
     {
-        public string Name { get; set; }
-        public string Password { get; set; }
+        public string GenerateJWTToken(UserCredentials name);
     }
 }

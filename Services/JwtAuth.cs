@@ -16,12 +16,13 @@ namespace JWTExample
             _config = conf;
         }
 
-        public string GenerateJWTToken(string name)
+        public string GenerateJWTToken(UserCredentials user)
         {
             var JwtToken = new System.IdentityModel.Tokens.Jwt.JwtSecurityToken(_config.issuer,
                                                                                 _config.audience,
                                                                                 new[] {
-                                                                                    new Claim(ClaimTypes.Name, name)
+                                                                                    new Claim(ClaimTypes.Name, user.Name),
+                                                                                    new Claim("UUID", user.UUID.ToString())
                                                                                 },
                                                                                 null,
                                                                                 DateTime.Now.AddMinutes(5),

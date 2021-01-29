@@ -1,13 +1,18 @@
+using JWTExample.Data;
+using JWTExample.Repository;
+using JWTExample.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,7 +27,7 @@ namespace JWTExample
 
         readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-        public Startup(Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
+        public Startup(Microsoft.AspNetCore.Hosting.IWebHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
            .SetBasePath(env.ContentRootPath)
@@ -36,8 +41,20 @@ namespace JWTExample
 
             var jwtTokenConfig = Configuration.GetSection("JwtConfig").Get<JwtConfig>();
 
+            services.AddDbContext<AuthDBContext>(option => { option.UseSqlServer(Configuration.GetConnectionString("myconn")); });
+            //services.AddTransient<HttpContext>();
             services.AddSingleton(jwtTokenConfig);
             services.AddSingleton<IJwtAuthcs, JwtAuth>();
+            services.AddSingleton<IRequestHeader, RequestHeader>();
+            services.AddTransient<RepositoryHelper>();
+
+            services.AddTransient<ICredentialsRepository, CredentialsRepository>();
+            services.AddTransient<ITodoRepository, TodoRepository>();
+
+            services.AddScoped<ILoginService, LoginService>();
+            services.AddScoped<IRegisterService, RegisterServicecs>();
+            services.AddScoped<ITodoService, TodoService>();
+
             services.AddMvc();
             services.AddAuthentication(x =>
             {

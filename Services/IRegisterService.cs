@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace JWTExample
+namespace JWTExample.Services
 {
-    public interface IJwtAuthcs
+    public interface IRegisterService
     {
-        public string GenerateJWTToken(string name);
+        bool Register(UserCredentials user);
     }
 }
