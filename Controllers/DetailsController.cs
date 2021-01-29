@@ -1,16 +1,12 @@
 ﻿using JWTExample.Data;
 using JWTExample.Models;
+using JWTExample.Repository;
 using JWTExample.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JWTExample.Controllers
 {
@@ -18,26 +14,21 @@ namespace JWTExample.Controllers
     [ApiController]
     public class DetailsController : Controller
     {
-        private readonly AuthDBContext _context;
         private readonly IRequestHeader _header;
-        public DetailsController(AuthDBContext context,
-                                 IRequestHeader header)
+        private readonly ITodoService _todo;
+        public DetailsController(IRequestHeader header,
+                                 ITodoService todo)
         {
-            _context = context;
             _header = header;
+            _todo = todo;
         }
 
         [Authorize]
         public List<Details> Index()
         {
-            List<Details> todo = new List<Details>();
+        var id = _header.GetUserId(HttpContext);            
 
-            var id = _header.GetUserId(HttpContext);
-
-            todo = _context.todo.Where(x => x.MOTHER_UUID == id).ToList();
-
-            return todo;
-
+        return _todo.TodoList(id);
         }
 
         [Authorize]
@@ -50,9 +41,18 @@ namespace JWTExample.Controllers
 
                 todo.MOTHER_UUID = id;
 
-                _context.todo.Add(todo);
-                _context.SaveChanges();
-                return Ok();
+               var add =_todo.Add(todo);
+
+                if (add)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+
+              
             }
             else
             {
@@ -70,18 +70,17 @@ namespace JWTExample.Controllers
                 return BadRequest();
             }
 
-            var details = _context.todo.Where(x => x.UUID == todo.UUID).FirstOrDefault();
+            var update = _todo.Update(todo);
 
-            details.MOTHER_UUID = todo.MOTHER_UUID;
-
-            details.TODO = todo.TODO;
-
-
-            _context.todo.Update(details);
-
-            _context.SaveChanges();
-
-            return Ok();
+            if (update)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+            
         }
 
 
@@ -89,14 +88,10 @@ namespace JWTExample.Controllers
         [HttpDelete("Delete")]
         public ActionResult Delete(Guid uuid)
         {
-            var entry = _context.todo.Where(x => x.UUID == uuid).FirstOrDefault();
+            var delete = _todo.Delete(uuid);
 
-            if (entry != null)
+            if (delete)
             {
-                _context.todo.Remove(entry);
-
-                _context.SaveChanges();
-
                 return Ok();
             }
             else

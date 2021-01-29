@@ -1,4 +1,5 @@
 using JWTExample.Data;
+using JWTExample.Repository;
 using JWTExample.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -45,6 +46,15 @@ namespace JWTExample
             services.AddSingleton(jwtTokenConfig);
             services.AddSingleton<IJwtAuthcs, JwtAuth>();
             services.AddSingleton<IRequestHeader, RequestHeader>();
+            services.AddTransient<RepositoryHelper>();
+
+            services.AddTransient<ICredentialsRepository, CredentialsRepository>();
+            services.AddTransient<ITodoRepository, TodoRepository>();
+
+            services.AddScoped<ILoginService, LoginService>();
+            services.AddScoped<IRegisterService, RegisterServicecs>();
+            services.AddScoped<ITodoService, TodoService>();
+
             services.AddMvc();
             services.AddAuthentication(x =>
             {

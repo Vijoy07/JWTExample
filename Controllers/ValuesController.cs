@@ -1,4 +1,6 @@
 ﻿using JWTExample.Data;
+using JWTExample.Repository;
+using JWTExample.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,14 +17,14 @@ namespace JWTExample
     {
         private readonly  JwtConfig _conf;
         private readonly IJwtAuthcs _auth;
-        private readonly AuthDBContext _context;
+        private readonly ILoginService _login;
         public ValuesController(JwtConfig conf,
                             IJwtAuthcs auth,
-                            AuthDBContext context)
+                            ILoginService login)
     {
         _conf = conf;
         _auth = auth;
-        _context = context;
+        _login = login;
     }
 
 
@@ -38,7 +40,7 @@ namespace JWTExample
             try
             {
 
-                var exists = _context.credentials.Where(x => x.Name == user.Name && x.Password == user.Password).FirstOrDefault();
+                var exists = _login.Login(user);
 
                 if (exists != null)
                 {

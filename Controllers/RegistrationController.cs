@@ -1,4 +1,6 @@
 ﻿using JWTExample.Data;
+using JWTExample.Repository;
+using JWTExample.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +15,11 @@ namespace JWTExample.Controllers
     [ApiController]
     public class RegistrationController : Controller
     {
-        private readonly AuthDBContext _context;
-        public RegistrationController(AuthDBContext dbContext)
+
+        private readonly IRegisterService _register;
+        public RegistrationController(IRegisterService reg)
         {
-            _context = dbContext;
+            _register = reg;
         }
 
         // GET: RegistrationController
@@ -26,18 +29,16 @@ namespace JWTExample.Controllers
         {
             try
             {
-                var user = _context.credentials.Select(x => x.Name == cred.Name).FirstOrDefault();
+                var user = _register.Register(cred);
 
                 if (user)
                 {
                     return Ok(new { user });
                 }
-
-                _context.credentials.Add(cred);
-
-                _context.SaveChanges();
-
-                return Ok(new { user });
+                else
+                {
+                    return BadRequest();
+                }
             }
             catch (Exception e) {
                 return BadRequest();
