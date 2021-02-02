@@ -24,6 +24,7 @@ namespace JWTExample.Controllers
         }
 
         [Authorize]
+        [HttpGet]
         public List<Details> Index()
         {
         var id = _header.GetUserId(HttpContext);            

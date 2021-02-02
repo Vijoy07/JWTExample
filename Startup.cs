@@ -41,6 +41,8 @@ namespace JWTExample
 
             var jwtTokenConfig = Configuration.GetSection("JwtConfig").Get<JwtConfig>();
 
+            services.AddSwaggerGen();
+
             services.AddDbContext<AuthDBContext>(option => { option.UseSqlServer(Configuration.GetConnectionString("myconn")); });
             //services.AddTransient<HttpContext>();
             services.AddSingleton(jwtTokenConfig);
@@ -101,6 +103,13 @@ namespace JWTExample
             app.UseAuthentication();
 
             app.UseAuthorization();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My Test1 Api v1");
+            });
 
             app.UseEndpoints(endpoints =>
             {
