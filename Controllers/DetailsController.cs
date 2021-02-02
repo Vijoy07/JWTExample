@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace JWTExample.Controllers
 {
-    [Route("api/{controller}")]
+    [Route("api/[controller]")]
     [ApiController]
     public class DetailsController : Controller
     {
