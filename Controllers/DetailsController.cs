@@ -23,6 +23,12 @@ namespace JWTExample.Controllers
             _todo = todo;
         }
 
+        // GET: DetailsController
+        // GET: api/Details    
+        /// <summary>    
+        /// DetailsController Api Get method    
+        /// </summary>    
+        /// <returns></returns> 
         [Authorize]
         [HttpGet]
         public List<Details> Index()
@@ -32,6 +38,13 @@ namespace JWTExample.Controllers
         return _todo.TodoList(id);
         }
 
+
+        // POST: DetailsController
+        // POST: api/Details/Add    
+        /// <summary>    
+        /// DetailsController Api Post method    
+        /// </summary>    
+        /// <returns></returns> 
         [Authorize]
         [HttpPost("Add")]
         public ActionResult Add(Details todo)
@@ -62,6 +75,12 @@ namespace JWTExample.Controllers
             
         }
 
+        // POST: DetailsController
+        // POST: api/Details/Update    
+        /// <summary>    
+        /// DetailsController Api Put method    
+        /// </summary>    
+        /// <returns></returns> 
         [Authorize]
         [HttpPut("Update")]
         public ActionResult Update(Details todo)
@@ -81,10 +100,15 @@ namespace JWTExample.Controllers
             {
                 return BadRequest();
             }
-            
+
         }
 
-
+        // DELETE: DetailsController
+        // DELETE: api/Details/{uuid}    
+        /// <summary>    
+        /// DetailsController Api Delete method    
+        /// </summary>    
+        /// <returns></returns> 
         [Authorize]
         [HttpDelete("Delete")]
         public ActionResult Delete(Guid uuid)

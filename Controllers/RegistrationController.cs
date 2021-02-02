@@ -13,16 +13,22 @@ namespace JWTExample.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class RegistrationController : Controller
     {
-
         private readonly IRegisterService _register;
+
         public RegistrationController(IRegisterService reg)
         {
             _register = reg;
         }
 
-        // GET: RegistrationController
+        // POST: RegistrationController
+        // POST api/Registratio/Register    
+        /// <summary>    
+        /// RegistrationController Api Post method    
+        /// </summary>    
+        /// <returns></returns> 
         [AllowAnonymous]
         [HttpPost("Register")]
         public IActionResult Register(UserCredentials cred)

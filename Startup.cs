@@ -11,8 +11,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -41,7 +43,29 @@ namespace JWTExample
 
             var jwtTokenConfig = Configuration.GetSection("JwtConfig").Get<JwtConfig>();
 
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(c => {
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "Test API",
+                    Description = "Sample description",
+                    TermsOfService = new Uri("https://example.com/terms"),
+                    Contact = new Microsoft.OpenApi.Models.OpenApiContact { 
+                        Name = "Vijoy",
+                        Email = "abc@cc.com",
+                        Url = new Uri("https://example.com")
+                    },
+                    License = new Microsoft.OpenApi.Models.OpenApiLicense { 
+                        Name = "Test License",
+                        Url = new Uri("https://example.com")
+                    }
+                });
+                // Set the comments path for the Swagger JSON and UI
+                
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
 
             services.AddDbContext<AuthDBContext>(option => { option.UseSqlServer(Configuration.GetConnectionString("myconn")); });
             //services.AddTransient<HttpContext>();

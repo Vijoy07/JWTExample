@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>JWTExample</name>
+    </assembly>
+    <members>
+        <member name="M:JWTExample.Controllers.DetailsController.Index">
+            <summary>    
+            DetailsController Api Get method    
+            </summary>    
+            <returns></returns> 
+        </member>
+        <member name="M:JWTExample.Controllers.DetailsController.Add(JWTExample.Models.Details)">
+            <summary>    
+            DetailsController Api Post method    
+            </summary>    
+            <returns></returns> 
+        </member>
+        <member name="M:JWTExample.Controllers.DetailsController.Update(JWTExample.Models.Details)">
+            <summary>    
+            DetailsController Api Put method    
+            </summary>    
+            <returns></returns> 
+        </member>
+        <member name="M:JWTExample.Controllers.DetailsController.Delete(System.Guid)">
+            <summary>    
+            DetailsController Api Delete method    
+            </summary>    
+            <returns></returns> 
+        </member>
+        <member name="M:JWTExample.Controllers.RegistrationController.Register(JWTExample.UserCredentials)">
+            <summary>    
+            RegistrationController Api Post method    
+            </summary>    
+            <returns></returns> 
+        </member>
+        <member name="M:JWTExample.ValuesController.Login(JWTExample.UserCredentials)">
+            <summary>    
+            ValuesController Api Post method    
+            </summary>    
+            <returns></returns> 
+        </member>
+    </members>
+</doc>

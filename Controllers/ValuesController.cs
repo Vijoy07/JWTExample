@@ -27,10 +27,16 @@ namespace JWTExample
         _login = login;
     }
 
+        // POST: ValuesController
+        // POST api/Values/Login    
+        /// <summary>    
+        /// ValuesController Api Post method    
+        /// </summary>    
+        /// <returns></returns> 
 
         [AllowAnonymous]
         [HttpPost("Login")]
-    public IActionResult Login(UserCredentials user)
+        public IActionResult Login(UserCredentials user)
     {
             if (string.IsNullOrEmpty(user.Name))
             {
